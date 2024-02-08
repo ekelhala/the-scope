@@ -168,6 +168,7 @@ MonoBehaviour:
   features: []
   m_renderMode: 1
   m_depthSubmissionMode: 0
+  m_symmetricProjection: 0
 --- !u!114 &-4662240775176080332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   - {fileID: 6076809829035460487}
   m_renderMode: 1
   m_depthSubmissionMode: 0
+  m_symmetricProjection: 0
 --- !u!114 &-4460976606180441082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -722,6 +724,7 @@ MonoBehaviour:
   - {fileID: 7449992127455429214}
   m_renderMode: 1
   m_depthSubmissionMode: 0
+  m_symmetricProjection: 0
 --- !u!114 &8446059436497457920
 MonoBehaviour:
   m_ObjectHideFlags: 0
