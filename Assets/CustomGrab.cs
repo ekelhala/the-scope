@@ -12,8 +12,8 @@ public class CustomGrab : MonoBehaviour
     public Transform grabbedObject = null;
     public InputActionReference action;
     bool grabbing = false;
-    Vector3 grabbedObjectPosition = new Vector3();
-    Quaternion grabbedObjectRotation = Quaternion.identity;
+    public Vector3 previousPosition = new Vector3();
+    public Quaternion previousRotation = Quaternion.identity;
 
     private void Start()
     {
@@ -40,8 +40,20 @@ public class CustomGrab : MonoBehaviour
             {
                 // Change these to add the delta position and rotation instead
                 // Save the position and rotation at the end of Update function, so you can compare previous pos/rot to current here
-                grabbedObject.position = transform.position;
-                grabbedObject.rotation = transform.rotation;
+                Quaternion deltaRotation = transform.rotation * Quaternion.Inverse(previousRotation);
+                Vector3 deltaPosition = transform.position - previousPosition;
+                if (otherHand != null && otherHand.grabbing)
+                {
+                    Vector3 deltaOtherPosition = otherHand.transform.position - otherHand.previousPosition;
+                    Quaternion deltaOtherRotation = otherHand.transform.rotation * Quaternion.Inverse(otherHand.previousRotation);
+                    Vector3 vector = deltaRotation * (grabbedObject.transform.position - transform.position);
+                    grabbedObject.transform.position += (deltaPosition + deltaOtherPosition + vector) - (grabbedObject.transform.position - transform.position);
+                    grabbedObject.rotation = deltaRotation * deltaOtherRotation * grabbedObject.transform.rotation;
+                }
+                else{
+                    grabbedObject.position += deltaPosition;
+                    grabbedObject.rotation *= deltaRotation;
+                }
             }
         }
         // If let go of button, release object
@@ -49,11 +61,8 @@ public class CustomGrab : MonoBehaviour
             grabbedObject = null;
 
         // Should save the current position and rotation here
-        if(grabbedObject)
-        {
-            grabbedObjectPosition = grabbedObject.position;
-            grabbedObjectRotation = grabbedObject.rotation;
-        }
+        previousPosition = transform.position;
+        previousRotation = transform.rotation;
     }
 
     private void OnTriggerEnter(Collider other)
