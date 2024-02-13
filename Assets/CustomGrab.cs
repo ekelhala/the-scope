@@ -25,6 +25,8 @@ public class CustomGrab : MonoBehaviour
             if (c != this)
                 otherHand = c;
         }
+        previousRotation = transform.rotation;
+        previousPosition = transform.position;
     }
 
     void Update()
@@ -48,11 +50,11 @@ public class CustomGrab : MonoBehaviour
                     Quaternion deltaOtherRotation = otherHand.transform.rotation * Quaternion.Inverse(otherHand.previousRotation);
                     Vector3 vector = deltaRotation * (grabbedObject.transform.position - transform.position);
                     grabbedObject.transform.position += (deltaPosition + deltaOtherPosition + vector) - (grabbedObject.transform.position - transform.position);
-                    grabbedObject.rotation = deltaRotation * deltaOtherRotation * grabbedObject.transform.rotation;
+                    grabbedObject.transform.rotation = (deltaRotation * deltaOtherRotation) * grabbedObject.transform.rotation;
                 }
                 else{
                     grabbedObject.position += deltaPosition;
-                    grabbedObject.rotation *= deltaRotation;
+                    grabbedObject.rotation = deltaRotation * grabbedObject.transform.rotation;
                 }
             }
         }
